@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CadoX</string>
+    <string name="titleValue">DETAIL D\'UN ARTICLE</string>
+    <string name="namearticle">Des lunettes de soleil (memory)</string>
+    <string name="descriptifarticle">RAY-BAN RB 4259 601/19 51/20</string>
+    <string name="prixarticle">85 E</string>
+    <string name="labachete">acheté le : August 28, 2020</string>
+    <string name="linkarticle">http://www.optical-center.fr/lunettes-de-soleil-ray-ban-6.html</string>
+</resources>
