@@ -2,4 +2,5 @@
 <resources>
     <integer name="satisfactionmax">5</integer>
     <integer name="satisfactionvalue">3</integer>
+    <integer name="numstarmax">5</integer>
 </resources>
