@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CadoX</string>
+    <string name="titleValue">DETAIL D\'UN ARTICLE</string>
+    <string name="namearticle"></string>
+    <string name="descriptifarticle"></string>
+    <string name="prixarticle"></string>
+    <string name="labachete"></string>
+    <string name="linkarticle"></string>
+
+    <string name="actionTexte">Exécution</string>
+    <string name="editeMessage">Voulez-vous vraiment modifier cet article?</string>
+    <string name="editeMessageTitle">Confirmation de modification</string>
+
+    <string name="txtYes">oui</string>
+    <string name="txtNo">non</string>
+    <string name="txtCancel">Annulé</string>
+
+    <string name="txtBYDate">acheté le : </string>
+    <string name="txtUnitMoney">€</string>
+    <string name="titreModification">Modification d\'un article</string>
+</resources>

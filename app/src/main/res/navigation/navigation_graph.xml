@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/detailsArticleFragment">
+
+    <fragment
+        android:id="@+id/detailsArticleFragment"
+        android:name="fr.eni.crt.cadox.DetailsArticleFragment"
+        android:label="fragment_details_article"
+        tools:layout="@layout/fragment_details_article" >
+        <action
+            android:id="@+id/action_detailsArticleFragment_to_modificationArticleFragment"
+            app:destination="@id/modificationArticleFragment"
+            app:popUpTo="@id/detailsArticleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/modificationArticleFragment"
+        android:name="fr.eni.crt.cadox.ModificationArticleFragment"
+        android:label="fragment_modification_article"
+        tools:layout="@layout/fragment_modification_article" >
+        <argument
+            android:name="article"
+            app:argType="fr.eni.crt.cadox.bo.Article" />
+    </fragment>
+</navigation>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ModificationArticleFragment">
+
+    <data>
+        <import type="android.view.View"></import>
+        <variable name="articleVueModification" type="fr.eni.crt.cadox.bo.Article" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Modification de l'article"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:id="@+id/l_detail_article"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/articlename"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{articleVueModification.intitule}"
+                    android:inputType="textPersonName"
+                    android:textSize="25sp" />
+
+                <EditText
+                    android:id="@+id/articledescriptif"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{articleVueModification.description}"
+                    android:inputType="textPersonName"/>
+
+                <EditText
+                    android:id="@+id/prix_article"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="@{articleVueModification.prix.toString() + @string/txtUnitMoney}"
+                    android:textAlignment="center"
+                    android:textSize="30sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lab_achete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:visibility="@{articleVueModification.achete ? View.VISIBLE : View.INVISIBLE}"/>
+
+
+                    <CheckBox
+                        android:id="@+id/achete_article"
+                        android:layout_width="wrap_content"
+                        android:onClick="methodeOnclick"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <RatingBar
+                    android:id="@+id/satisfaction_article"
+                    style="@style/Widget.AppCompat.RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal"
+                    android:clickable="true"
+                    android:isIndicator="false"
+                    android:numStars="@integer/numstarmax"
+                    android:rating="@{articleVueModification.niveau}"
+                    android:stepSize="1" />
+
+                <EditText
+                    android:id="@+id/link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{articleVueModification.url}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/la_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:minWidth="30sp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/buttonClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+                <ImageButton
+                    android:id="@+id/buttonSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@android:drawable/ic_menu_save" />
+
+                <ImageButton
+                    android:id="@+id/buttonReturn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@android:drawable/ic_menu_send" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

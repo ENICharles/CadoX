@@ -1,10 +1,12 @@
 package fr.eni.crt.cadox.bo;
 
 import android.icu.text.SimpleDateFormat;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Date;
 
-public class Article
+public class Article implements Parcelable
 {
     private int     id;
     private String  intitule;
@@ -15,7 +17,15 @@ public class Article
     private byte    niveau; // 0 - 5 (+ ou - satisfait)
     private String  url;
 
-    public Article(int id, String intitule, String description, Float prix, boolean achete, byte niveau, String url,Date    dateAchat)
+    public Article(
+            int id,
+                   String intitule,
+                   String description,
+                   Float prix,
+                   boolean achete,
+                   byte niveau,
+                   String url,
+                   Date    dateAchat)
     {
         this.id          = id;
         this.intitule    = intitule;
@@ -26,6 +36,39 @@ public class Article
         this.niveau      = niveau;
         this.url         = url;
     }
+
+    protected Article(Parcel in)
+    {
+        id = in.readInt();
+        intitule = in.readString();
+        description = in.readString();
+        if (in.readByte() == 0)
+        {
+            prix = null;
+        }
+        else
+        {
+            prix = in.readFloat();
+        }
+        achete = in.readByte() != 0;
+        niveau = in.readByte();
+        url = in.readString();
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>()
+    {
+        @Override
+        public Article createFromParcel(Parcel in)
+        {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size)
+        {
+            return new Article[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -92,5 +135,31 @@ public class Article
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i)
+    {
+        parcel.writeInt(id);
+        parcel.writeString(intitule);
+        parcel.writeString(description);
+        if (prix == null)
+        {
+            parcel.writeByte((byte) 0);
+        }
+        else
+        {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(prix);
+        }
+
+        parcel.writeByte((byte) (achete ? 1 : 0));
+        parcel.writeByte(niveau);
+        parcel.writeString(url);
     }
 }

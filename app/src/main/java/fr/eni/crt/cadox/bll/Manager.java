@@ -1,25 +1,31 @@
 package fr.eni.crt.cadox.bll;
 
-import android.util.Log;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import fr.eni.crt.cadox.bo.Article;
 import fr.eni.crt.cadox.dal.Dal;
+import fr.eni.crt.cadox.dal.FactoryDAO;
 
 public class Manager
 {
+    private static Manager reference = null;
+
     private List<Article> articles;
 
-    public Manager()
+    private Manager()
     {
         updateListArticle();
         articles = getArticles();
+    }
+
+    public static Manager getReference()
+    {
+        if(reference == null)
+        {
+            reference = new Manager();
+        }
+
+        return reference;
     }
 
     /**
@@ -55,18 +61,14 @@ public class Manager
      */
     public void updateListArticle()
     {
-        Dal dal = new Dal();
-
-        articles = dal.getArticles();
+        this.articles = FactoryDAO.getImplementation().getArticles();
     }
 
     /**
-     * Met à jour la liste des articles
+     * Mise à jour de l'article
      */
     public void updateArticle(Article article)
     {
-        Dal dal = new Dal();
-
-        dal.updateArticle(article);
+        FactoryDAO.getImplementation().updateArticle(article);
     }
 }
