@@ -1,10 +1,16 @@
 package fr.eni.crt.cadox;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
@@ -13,6 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,21 +48,30 @@ public class DetailsArticleFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
+        Log.i("modification","ici");
+
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_details_article,container,false);
 
         /* récupération d'une instance du manager */
         Manager manager = Manager.getReference();
+        manager.updateListArticle();
 
         /* récupération de l'article d'ID 1 */
         article = manager.getArticleById(1);
+        Toast.makeText(DetailsArticleFragment.this.getActivity(),article.getDescription(), Toast.LENGTH_LONG).show();
 
         if(article != null)
         {
             /* gestion du label date */
             checkDateAchat();
 
+            Log.i("modification","mise à jour de l'affichage");
             /* attribution des valeurs */
             binding.setArticleVue(article);
+        }
+        else
+        {
+            Toast.makeText(DetailsArticleFragment.this.getActivity(),"Oups pas d'article", Toast.LENGTH_LONG).show();
         }
 
         /* récupération des évènements sur les boutons */
@@ -64,15 +80,11 @@ public class DetailsArticleFragment extends Fragment
             /* création d'une "popup furtive" */
             Toast.makeText(DetailsArticleFragment.this.getActivity(), binding.link.getText(), Toast.LENGTH_LONG).show();
 
-            Log.i("modification","nouvelle informations " + 1 + "| nom :|" +
-                    binding.nameArticle.getText().toString() + "| description :|" +
-                    binding.descriptifArticle.getText().toString() + "| ischeck :|" +
-                    binding.acheteArticle.isChecked() + "| rating :|" +
-                    (byte) binding.satisfactionArticle.getRating() + "| link :|" +
-                    binding.link.getText().toString() + "| date :|" +
-                    new Date());
-        }));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(binding.link.getText().toString()));
 
+            startActivity(intent);
+
+        }));
 
         binding.acheteArticle.setOnClickListener((view ->
         {
@@ -87,6 +99,7 @@ public class DetailsArticleFragment extends Fragment
                 article.setAchete(false);
             }
 
+            Log.i("modification","grrr");
             /* mise à jour de l'article */
             manager.updateArticle(article);
 
@@ -135,12 +148,32 @@ public class DetailsArticleFragment extends Fragment
         {
             Log.i("mainAc", "sms");
 
-            Snackbar.make(binding.prixArticle, "text example", Snackbar.LENGTH_LONG).
+
+            if (ContextCompat.checkSelfPermission(DetailsArticleFragment.this.getActivity().getBaseContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
+            {
+                try
+                {
+                    Intent intent = new Intent();
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage("0647544713",null,"coucou de l'application",null,null);
+                }
+                catch(ActivityNotFoundException anfe)
+                {
+                    Toast.makeText(DetailsArticleFragment.this.getContext(), "Oups", Toast.LENGTH_LONG).show();
+                }
+
+            }
+            else
+            {
+                Toast.makeText(DetailsArticleFragment.this.getContext(), "Oups2", Toast.LENGTH_LONG).show();
+            }
+
+/*            Snackbar.make(binding.prixArticle, "text example", Snackbar.LENGTH_LONG).
                     setAction(R.string.actionTexte, view ->
                     {
                         Toast.makeText(DetailsArticleFragment.this.getActivity(), "Envoie du sms", Toast.LENGTH_LONG).show();
                     })
-                    .show();
+                    .show();*/
 
         }));
 
@@ -151,21 +184,22 @@ public class DetailsArticleFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
+        Log.i("modification","la");
+
         super.onCreate(savedInstanceState);
 
-        NavController navController = NavHostFragment.findNavController(this);
+//        NavController navController = NavHostFragment.findNavController(this);
+//
+//        NavBackStackEntry navBackStackEntry = navController.getCurrentBackStackEntry();
+//
+//        SavedStateHandle savedStateHandle = navBackStackEntry.getSavedStateHandle();
 
-        NavBackStackEntry navBackStackEntry = navController.getCurrentBackStackEntry();
-
-        SavedStateHandle savedStateHandle = navBackStackEntry.getSavedStateHandle();
-
-        savedStateHandle.getLiveData("Article")
-                .observe(navBackStackEntry, article ->
-                {
-                    Toast.makeText(DetailsArticleFragment.this.getContext(), ((Article)article).getDescription().toString(), Toast.LENGTH_LONG).show();
-                    binding.setArticleVue((Article)article);
-                });
-
+//        savedStateHandle.getLiveData("Article")
+//                .observe(navBackStackEntry, article ->
+//                {
+////                    Toast.makeText(DetailsArticleFragment.this.getContext(), ((Article)article).getDescription().toString(), Toast.LENGTH_LONG).show();
+////                    binding.setArticleVue((Article)article);
+//                });
     }
 
     /**

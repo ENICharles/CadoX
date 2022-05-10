@@ -39,34 +39,22 @@ public class ModificationArticleFragment extends Fragment
         //args.getArticle().setDescription("coucou");
         binding.setArticleVueModification(args.getArticle());
 
-//        Article article = new Article(
-//                1,
-//                binding.nameArticle.getText().toString(),
-//                binding.descriptifArticle.getText().toString(),
-//                Float.valueOf(binding.prixArticle.getText().toString()),
-//                binding.acheteArticle.isChecked(),
-//                (byte) binding.satisfactionArticle.getRating(),
-//                binding.link.getText().toString(),
-//                new Date());
-
-//        article.setDescription(binding.descriptifArticle.toString());
-        //binding.setArticleVue(args.getArticle());
-
-
-        Log.i("modification","nouvelle informations " + 1 + "| nom :|" +
-                binding.articlename.getText().toString() + "| description :|" +
-                binding.articledescriptif.toString() + "| ischeck :|" +
-                binding.acheteArticle.isChecked() + "| rating :|" +
-                (byte) binding.satisfactionArticle.getRating() + "| link :|" +
-                binding.link.getText().toString() + "| date :|" +
-                new Date());
-
         binding.buttonSave.setOnClickListener((view ->
         {
+            Article article = new Article(
+                    1,
+                    binding.articlename.getText().toString(),
+                    binding.articledescriptif.getText().toString(),
+                    Float.valueOf(binding.prixArticle.getText().toString()),
+                    binding.acheteArticle.isChecked(),
+                    (byte) binding.satisfactionArticle.getRating(),
+                    binding.link.getText().toString(),
+                    new Date());
+
             Log.i("modification","nouvelle informations2 id :|" +
                     1 + "| nom :|" +
                     binding.articlename.getText().toString() + "| description :|" +
-                    binding.articledescriptif.toString() + "| ischeck :|" +
+                    binding.articledescriptif.getText().toString() + "| ischeck :|" +
                     binding.acheteArticle.isChecked() + "| rating :|" +
                     (byte) binding.satisfactionArticle.getRating() + "| link :|" +
                     binding.link.getText().toString() + "| date :|" +
@@ -74,13 +62,12 @@ public class ModificationArticleFragment extends Fragment
 
             /* mise à jour de l'article en base */
             Manager manager = Manager.getReference();
-            manager.updateArticle(binding.getArticleVueModification());
+            manager.updateArticle(article);
 
             /* notification de la modification de l'article à la vue */
-
             NavController navController = NavHostFragment.findNavController(ModificationArticleFragment.this);
 
-            navController.getPreviousBackStackEntry().getSavedStateHandle().set("Article",binding.getArticleVueModification());
+            navController.getPreviousBackStackEntry().getSavedStateHandle().set("Article",article);
 
             ModificationArticleFragment.this.getActivity().onBackPressed();
 

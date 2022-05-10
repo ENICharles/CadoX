@@ -4,6 +4,6 @@ public abstract class FactoryDAO
 {
     public static Dal getImplementation()
     {
-        return new DAOImp();
+        return DAOImp.getReference();
     }
 }

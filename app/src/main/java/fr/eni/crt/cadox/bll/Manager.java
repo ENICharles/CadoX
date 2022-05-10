@@ -1,5 +1,7 @@
 package fr.eni.crt.cadox.bll;
 
+import android.util.Log;
+
 import java.util.List;
 
 import fr.eni.crt.cadox.bo.Article;
@@ -10,18 +12,18 @@ public class Manager
 {
     private static Manager reference = null;
 
-    private List<Article> articles;
+    private static List<Article> articles;
 
     private Manager()
     {
-        updateListArticle();
-        articles = getArticles();
+        //updateListArticle();
     }
 
     public static Manager getReference()
     {
         if(reference == null)
         {
+            Log.i("modification","nouveau manager");
             reference = new Manager();
         }
 
@@ -45,7 +47,7 @@ public class Manager
     public Article getArticleById(int id)
     {
         Article ret = null;
-        for (Article ar: this.articles)
+        for (Article ar: Manager.articles)
         {
             if (ar.getId() == id)
             {
@@ -61,7 +63,7 @@ public class Manager
      */
     public void updateListArticle()
     {
-        this.articles = FactoryDAO.getImplementation().getArticles();
+        Manager.articles = FactoryDAO.getImplementation().getArticles();
     }
 
     /**
@@ -70,5 +72,6 @@ public class Manager
     public void updateArticle(Article article)
     {
         FactoryDAO.getImplementation().updateArticle(article);
+        updateListArticle();
     }
 }
