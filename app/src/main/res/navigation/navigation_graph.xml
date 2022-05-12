@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_details_article" >
         <action
             android:id="@+id/action_detailsArticleFragment_to_modificationArticleFragment"
-            app:destination="@id/modificationArticleFragment" />
+            app:destination="@id/modificationArticleFragment"
+            app:popUpTo="@id/liste_Fragment" />
         <argument
             android:name="article"
             app:argType="fr.eni.crt.cadox.bo.Article" />
@@ -24,7 +25,8 @@
         tools:layout="@layout/fragment_modification_article" >
         <argument
             android:name="article"
-            app:argType="fr.eni.crt.cadox.bo.Article" />
+            app:argType="fr.eni.crt.cadox.bo.Article"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/liste_Fragment"
@@ -34,5 +36,9 @@
         <action
             android:id="@+id/action_liste_Fragment_to_detailsArticleFragment"
             app:destination="@id/detailsArticleFragment" />
+        <action
+            android:id="@+id/action_liste_Fragment_to_modificationArticleFragment"
+            app:destination="@id/modificationArticleFragment"
+            app:popUpTo="@id/liste_Fragment" />
     </fragment>
 </navigation>

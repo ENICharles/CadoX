@@ -3,6 +3,8 @@ package fr.eni.crt.cadox.bll;
 import android.util.Log;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import fr.eni.crt.cadox.bo.Article;
 import fr.eni.crt.cadox.dal.Dal;
@@ -11,12 +13,13 @@ import fr.eni.crt.cadox.dal.FactoryDAO;
 public class Manager
 {
     private static Manager reference = null;
+    private static Dal     dao;
 
-    private static List<Article> articles;
+    //private static List<Article> articles;
 
     private Manager()
     {
-        //updateListArticle();
+        dao = FactoryDAO.getImplementation();
     }
 
     public static Manager getReference()
@@ -34,44 +37,40 @@ public class Manager
      * retourne la liste des articles
      * @return
      */
-    public List<Article> getArticles()
+    public void getArticles(RepositoryEventCalback<List<Article>> callback)
     {
-        return articles;
-    }
+        Executor asyncTask = Executors.newSingleThreadExecutor();
 
-    /**
-     * retourne l'article choisi par son ID
-     * @param id
-     * @return
-     */
-    public Article getArticleById(int id)
-    {
-        Article ret = null;
-        for (Article ar: Manager.articles)
+        asyncTask.execute(()->
         {
-            if (ar.getId() == id)
-            {
-                ret = ar;
-            }
-        }
-
-        return ret;
+            List<Article> list = dao.getArticles();
+            callback.onComplete(list);
+        });
     }
 
-    /**
-     * Met à jour la liste des articles
-     */
-    public void updateListArticle()
+    public void add(Article article,RepositoryEventCalback<Article> callback)
     {
-        Manager.articles = FactoryDAO.getImplementation().getArticles();
+        Executor asyncTask = Executors.newSingleThreadExecutor();
+
+        asyncTask.execute(()->
+        {
+            dao.insert(article);
+
+            callback.onComplete(article);
+        });
     }
+
 
     /**
      * Mise à jour de l'article
      */
     public void updateArticle(Article article)
     {
-        FactoryDAO.getImplementation().updateArticle(article);
-        updateListArticle();
+        Executor asyncTask = Executors.newSingleThreadExecutor();
+
+        asyncTask.execute(()->
+        {
+            dao.updateArticle(article);
+        });
     }
 }

@@ -2,6 +2,7 @@ package fr.eni.crt.cadox.dal;
 
 import android.util.Log;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,13 +58,19 @@ public class DAOImp implements Dal
                         true,
                         (byte)(r.nextInt(4) + 1),
                         "http://www.optical-center.fr/lunettes-de-soleil-ray-ban-6.html",
-                        date);
+                        LocalDate.now());
 
                 articles.add(article);
             }
         }
 
         return articles;
+    }
+
+    @Override
+    public void insert(Article data)
+    {
+        Log.i("modification","Dois pas passer par ici");
     }
 
     /**

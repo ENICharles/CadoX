@@ -9,6 +9,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Random;
 
 import fr.eni.crt.cadox.bll.Manager;
+import fr.eni.crt.cadox.bll.RepositoryEventCalback;
 import fr.eni.crt.cadox.bo.Article;
 import fr.eni.crt.cadox.databinding.FragmentListeBinding;
 
@@ -31,9 +35,14 @@ public class Liste_Fragment extends Fragment
     private FragmentListeBinding binding;
     private ItemListAdapter      adapter;
     private Manager              manager;
+    private Random rdm = new Random();
+    private Handler handler;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
+        /* récupération du thread principal */
+        handler = Handler.createAsync(Looper.getMainLooper());
+
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_liste,container,false);
 
         adapter = new ItemListAdapter(new ItemListAdapter.ArticleDiff(), new OnRecyclerViewEventListener()
@@ -51,16 +60,30 @@ public class Liste_Fragment extends Fragment
             }
         });
 
-        /* avec le binding afficher les info sur le layout fragmen_list ???*/
+        /* avec le binding afficher les infos sur le layout fragmen_tlist ???*/
         binding.itemRecyclerView.setAdapter(adapter);
         binding.itemRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(),LinearLayoutManager.VERTICAL,false));
         binding.itemRecyclerView.setHasFixedSize(true);
 
         manager = Manager.getReference();
-        manager.updateListArticle();
-        List<Article> list = manager.getArticles();
 
-        adapter.submitList(list);
+        manager.getArticles(new RepositoryEventCalback<List<Article>>()
+        {
+            @Override
+            public void onComplete(List<Article> data)
+            {
+                adapter.submitList(data);
+            }
+        });
+
+        //TODO ajout d'un nouvel élément dans la liste
+        binding.floatingActionButton.setOnClickListener(v ->
+        {
+            NavController navController = NavHostFragment.findNavController(Liste_Fragment.this);
+
+            Liste_FragmentDirections.ActionListeFragmentToModificationArticleFragment action = Liste_FragmentDirections.actionListeFragmentToModificationArticleFragment(null);
+            Navigation.findNavController(binding.getRoot()).navigate(action);
+        });
 
         return binding.getRoot();
     }

@@ -4,28 +4,45 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+import java.time.LocalDate;
 import java.util.Date;
 
+@Entity(tableName = "Articles", indices = @Index(value={"Nom"},unique = true))
 public class Article implements Parcelable
 {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "Id")
     private int     id;
+    @ColumnInfo(name = "Nom")
     private String  intitule;
+    @ColumnInfo(name = "Description")
     private String  description;
+    @ColumnInfo(name = "Prix")
     private Float   prix;
+    @ColumnInfo(name = "Acheté")
     private boolean achete; //acheté ou non
-    private Date    dateAchat;
+    @ColumnInfo(name = "DateAchat")
+    private LocalDate    dateAchat;
+    @ColumnInfo(name = "Satisfaction")
     private byte    niveau; // 0 - 5 (+ ou - satisfait)
+    @ColumnInfo(name = "Lien")
     private String  url;
 
     public Article(
-            int id,
-                   String intitule,
-                   String description,
-                   Float prix,
-                   boolean achete,
-                   byte niveau,
-                   String url,
-                   Date    dateAchat)
+                   int       id,
+                   String    intitule,
+                   String    description,
+                   Float     prix,
+                   boolean   achete,
+                   byte      niveau,
+                   String    url,
+                   LocalDate dateAchat)
     {
         this.id          = id;
         this.intitule    = intitule;
@@ -37,6 +54,43 @@ public class Article implements Parcelable
         this.url         = url;
     }
 
+    @Ignore
+    public Article(
+            String    intitule,
+            String    description,
+            Float     prix,
+            byte      niveau,
+            String    url)
+    {
+        this.id          = id;
+        this.intitule    = intitule;
+        this.description = description;
+        this.prix        = prix;
+        this.niveau      = niveau;
+        this.url         = url;
+    }
+
+    @Ignore
+    public Article(
+            String    intitule,
+            String    description,
+            Float     prix,
+            boolean   achete,
+            byte      niveau,
+            String    url,
+            LocalDate dateAchat)
+    {
+        this.id          = id;
+        this.intitule    = intitule;
+        this.description = description;
+        this.prix        = prix;
+        this.achete      = achete;
+        this.dateAchat   = dateAchat;
+        this.niveau      = niveau;
+        this.url         = url;
+    }
+
+    @Ignore
     protected Article(Parcel in)
     {
         id = in.readInt();
@@ -110,14 +164,14 @@ public class Article implements Parcelable
         this.achete = achete;
     }
 
-    public String getDateAchat()
+    public LocalDate getDateAchat()
     {
         SimpleDateFormat forDate = new SimpleDateFormat("dd/MM/YYYY");
 
-        return forDate.format(dateAchat);
+        return dateAchat;
     }
 
-    public void setDateAchat(Date dateAchat) {
+    public void setDateAchat(LocalDate dateAchat) {
         this.dateAchat = dateAchat;
     }
 

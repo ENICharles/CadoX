@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import fr.eni.crt.cadox.bll.Manager;
@@ -54,10 +55,10 @@ public class DetailsArticleFragment extends Fragment
 
         /* récupération d'une instance du manager */
         Manager manager = Manager.getReference();
-        manager.updateListArticle();
 
-        /* récupération de l'article d'ID 1 */
-        article = manager.getArticleById(1);
+        /* récupération des arguments */
+        DetailsArticleFragmentArgs args = DetailsArticleFragmentArgs.fromBundle(getArguments());
+        article = args.getArticle();
         Toast.makeText(DetailsArticleFragment.this.getActivity(),article.getDescription(), Toast.LENGTH_LONG).show();
 
         if(article != null)
@@ -91,7 +92,7 @@ public class DetailsArticleFragment extends Fragment
             if(binding.acheteArticle.isChecked())
             {
                 /* mise à la date du jour */
-                article.setDateAchat(new Date());
+                article.setDateAchat(LocalDate.now());
                 article.setAchete(true);
             }
             else
